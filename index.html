@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fanoon: The Ledger and The Lullaby</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+      --font-serif: "Spectral", "Georgia", serif;
+      --transition-fast: 180ms ease;
+      --transition-slow: 800ms cubic-bezier(0.22, 1, 0.36, 1);
+      --hero-depth: 28px;
+      --accent: #0f62fe;
+      --bg: #f6f7fb;
+      --bg-alt: #ffffff;
+      --fg: #111826;
+      --muted: rgba(17, 24, 38, 0.7);
+      --grid-line: rgba(17, 24, 38, 0.08);
+      --glow: rgba(15, 98, 254, 0.65);
+    }
+
+    body.creative {
+      --accent: #ff7edb;
+      --bg: radial-gradient(circle at 20% 20%, rgba(117, 50, 255, 0.55), rgba(10, 10, 30, 0.95));
+      --bg-alt: rgba(6, 8, 24, 0.82);
+      --fg: #f6f7fb;
+      --muted: rgba(246, 247, 251, 0.7);
+      --grid-line: rgba(246, 247, 251, 0.12);
+      --glow: rgba(255, 126, 219, 0.8);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--fg);
+      transition: background 900ms ease, color var(--transition-fast);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.4;
+      mix-blend-mode: soft-light;
+      transition: opacity var(--transition-fast);
+      z-index: -1;
+    }
+
+    body.creative::before {
+      opacity: 0.22;
+      background-size: 140px 140px;
+    }
+
+    main {
+      width: min(1200px, 92vw);
+      margin: 0 auto;
+      padding: 40px 0 120px;
+    }
+
+    header {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      align-content: center;
+      gap: 40px;
+    }
+
+    .hero-stage {
+      position: relative;
+      perspective: 1500px;
+      transform-style: preserve-3d;
+      height: clamp(320px, 55vh, 520px);
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    canvas#ink {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 32px;
+      filter: saturate(1.1) contrast(1.1);
+    }
+
+    .hero-text {
+      position: relative;
+      display: inline-flex;
+      transform-style: preserve-3d;
+      transition: transform var(--transition-slow);
+    }
+
+    .hero-text span {
+      font-family: var(--font-serif);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 600;
+      letter-spacing: clamp(0.3rem, 1vw, 0.6rem);
+      display: inline-block;
+      padding: 0 0.08em;
+      text-transform: uppercase;
+      color: var(--bg-alt);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(200, 206, 220, 0.9));
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(12, 15, 32, 0.28);
+      transform-style: preserve-3d;
+      margin: 0 3px;
+      transition: transform var(--transition-slow), box-shadow var(--transition-fast), background var(--transition-fast);
+    }
+
+    body.creative .hero-text span {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 126, 219, 0.24));
+      box-shadow: 0 24px 60px rgba(255, 126, 219, 0.4);
+    }
+
+    .hero-text span::before,
+    .hero-text span::after {
+      content: attr(data-letter);
+      position: absolute;
+      inset: 0;
+      transform-origin: center;
+      transition: transform var(--transition-slow), opacity var(--transition-fast);
+    }
+
+    .hero-text span::before {
+      transform: translateZ(calc(var(--hero-depth) * -0.5)) rotateY(0deg);
+      opacity: 0.18;
+    }
+
+    .hero-text span::after {
+      transform: translateZ(calc(var(--hero-depth) * 0.5));
+      color: var(--accent);
+      text-shadow: 0 0 18px var(--glow);
+    }
+
+    .hero-text.low-poly span {
+      background: rgba(0, 0, 0, 0.2);
+      color: transparent;
+      text-shadow: none;
+      border: 1px solid var(--accent);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .hero-text.low-poly span::before,
+    .hero-text.low-poly span::after {
+      opacity: 0.6;
+      color: var(--accent);
+    }
+
+    .hero-text.low-poly span::after {
+      text-shadow: none;
+    }
+
+    .hero-caption {
+      max-width: 420px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: var(--muted);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeUp 1s ease 0.4s forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn, .toggle {
+      border: 1px solid rgba(17, 24, 38, 0.14);
+      background: var(--bg-alt);
+      color: var(--fg);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    body.creative .btn,
+    body.creative .toggle {
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(7, 10, 28, 0.74);
+      box-shadow: 0 0 20px rgba(255, 126, 219, 0.18);
+    }
+
+    .btn:hover,
+    .toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(12, 15, 32, 0.18);
+    }
+
+    section {
+      margin-top: 120px;
+    }
+
+    section h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 5vw, 3rem);
+      margin-bottom: 16px;
+    }
+
+    section p.lede {
+      color: var(--muted);
+      max-width: 520px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .gallery {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(280px, 360px);
+      gap: 24px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .poster {
+      position: relative;
+      background: var(--bg-alt);
+      border-radius: 24px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 24px 40px rgba(12, 15, 32, 0.18);
+      scroll-snap-align: center;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .poster:hover {
+      transform: translateY(-12px) rotateX(4deg);
+      box-shadow: 0 40px 60px rgba(12, 15, 32, 0.3);
+    }
+
+    .poster figure {
+      margin: 0;
+      background: linear-gradient(135deg, rgba(15, 98, 254, 0.2), rgba(15, 98, 254, 0.05));
+      border-radius: 18px;
+      height: 220px;
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+    }
+
+    body.creative .poster figure {
+      background: linear-gradient(135deg, rgba(255, 126, 219, 0.24), rgba(117, 50, 255, 0.18));
+    }
+
+    .poster h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .poster p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .prompt-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(420px, 92vw);
+      height: 100vh;
+      background: rgba(6, 8, 24, 0.92);
+      color: #f6f7fb;
+      transform: translateX(100%);
+      transition: transform var(--transition-slow);
+      padding: 48px 32px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 18px;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+    }
+
+    .prompt-panel.open {
+      transform: translateX(0);
+    }
+
+    .prompt-panel header {
+      min-height: auto;
+      gap: 12px;
+    }
+
+    .prompt-panel h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .prompt-panel pre {
+      white-space: pre-wrap;
+      margin: 0;
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .prompt-panel button {
+      justify-self: start;
+    }
+
+    .about-visual {
+      margin-top: 40px;
+      background: var(--bg-alt);
+      border-radius: 28px;
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 32px 60px rgba(12, 15, 32, 0.2);
+      overflow: hidden;
+    }
+
+    svg#fusion {
+      width: 100%;
+      height: 320px;
+    }
+
+    svg#fusion.low-poly path {
+      stroke: rgba(255, 255, 255, 0.8);
+      stroke-width: 2;
+      filter: none;
+    }
+
+    svg#fusion.low-poly circle {
+      fill: transparent;
+      stroke: rgba(255, 255, 255, 0.8);
+      stroke-width: 1.6;
+      filter: none;
+    }
+
+    svg#fusion.low-poly rect {
+      fill: rgba(255, 255, 255, 0.1);
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1.2;
+    }
+
+    #nodes circle.wire {
+      fill: transparent !important;
+      stroke: var(--accent);
+      stroke-width: 1.4;
+      filter: none !important;
+    }
+
+    .cta {
+      margin: 160px auto 0;
+      text-align: center;
+      padding: 120px 20px;
+      border-radius: 36px;
+      background: linear-gradient(135deg, rgba(15, 98, 254, 0.1), rgba(15, 98, 254, 0.02));
+      box-shadow: 0 40px 80px rgba(12, 15, 32, 0.24);
+    }
+
+    body.creative .cta {
+      background: linear-gradient(135deg, rgba(255, 126, 219, 0.22), rgba(117, 50, 255, 0.18));
+      box-shadow: 0 50px 90px rgba(8, 9, 24, 0.55);
+    }
+
+    .cta h2 {
+      font-size: clamp(2.5rem, 6vw, 3.6rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cta p {
+      max-width: 460px;
+      margin: 16px auto 36px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .cta .btn {
+      padding: 14px 32px;
+      font-size: 1.05rem;
+      letter-spacing: 0.2em;
+    }
+
+    @media (max-width: 720px) {
+      .hero-text span {
+        letter-spacing: 0.22em;
+      }
+
+      .controls {
+        flex-wrap: wrap;
+      }
+
+      .poster {
+        padding: 16px;
+      }
+
+      header {
+        padding-top: 60px;
+      }
+    }
+  </style>
+</head>
+<body class="corporate">
+  <main>
+    <header>
+      <div class="controls">
+        <button class="toggle" id="themeToggle">Switch to Creative Mode</button>
+        <span class="hint">Press <strong>L</strong> for low-poly wireframe.</span>
+      </div>
+      <div class="hero-stage" id="heroStage">
+        <canvas id="ink"></canvas>
+        <div class="hero-text" id="heroText">
+          <span data-letter="F">F</span>
+          <span data-letter="A">A</span>
+          <span data-letter="N">N</span>
+          <span data-letter="O">O</span>
+          <span data-letter="O">O</span>
+          <span data-letter="N">N</span>
+        </div>
+      </div>
+      <p class="hero-caption">Where Commerce Meets Culture. Fanoon is the ledger of ideas and the lullaby for
+        restless makers. Explore a digital journey that binds analytics and artistry.</p>
+    </header>
+
+    <section id="gallery">
+      <h2>Six Views of Synthesis</h2>
+      <p class="lede">An immersive carousel celebrating how data-driven insights and creative intuition
+        resonate together. Drag, scroll, or tap to wander the collection.</p>
+      <div class="gallery">
+        <div class="carousel" id="carousel"></div>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>Commerce x Creativity</h2>
+      <p class="lede">This animated diagram shows the club&apos;s dual nature—structured ambition intertwined with
+        lyrical experimentation. Watch the bars rise while a luminous ribbon connects our objectives.</p>
+      <div class="about-visual">
+        <svg id="fusion" viewBox="0 0 800 320" role="img" aria-label="Animated visualization mixing bar chart and creative curve">
+          <defs>
+            <linearGradient id="barGradient" gradientUnits="userSpaceOnUse" x1="0" y1="320" x2="0" y2="0">
+              <stop offset="0%" stop-color="rgba(15,98,254,0.1)" />
+              <stop offset="100%" stop-color="rgba(15,98,254,0.6)" />
+            </linearGradient>
+            <linearGradient id="curveGradient" gradientUnits="userSpaceOnUse" x1="0" y1="320" x2="800" y2="0">
+              <stop offset="0%" stop-color="rgba(255,126,219,0.3)" />
+              <stop offset="100%" stop-color="rgba(117,50,255,0.8)" />
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <g id="bars"></g>
+          <path id="curve" d="" fill="none" stroke="url(#curveGradient)" stroke-width="5" stroke-linecap="round"
+            filter="url(#glow)" />
+          <g id="nodes"></g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="cta" id="cta">
+      <h2>Be Human. Be Creative. Be Remembered.</h2>
+      <p>Fanoon invites commerce students to explore a different balance sheet&mdash;one where imagination accrues
+        compound interest. Join the collective and build unforgettable experiences.</p>
+      <button class="btn" id="joinBtn">Join or Learn More</button>
+    </section>
+  </main>
+
+  <aside class="prompt-panel" id="promptPanel">
+    <header>
+      <h3 id="promptTitle">Prompt</h3>
+      <button class="btn" id="closePrompt">Close</button>
+    </header>
+    <pre id="promptBody"></pre>
+  </aside>
+
+  <template id="posterTemplate">
+    <article class="poster">
+      <figure></figure>
+      <h3></h3>
+      <p></p>
+      <button class="btn reveal">Reveal Prompt</button>
+    </article>
+  </template>
+
+  <script>
+    const heroStage = document.getElementById('heroStage');
+    const heroText = document.getElementById('heroText');
+    const themeToggle = document.getElementById('themeToggle');
+    const carousel = document.getElementById('carousel');
+    const promptPanel = document.getElementById('promptPanel');
+    const promptTitle = document.getElementById('promptTitle');
+    const promptBody = document.getElementById('promptBody');
+    const closePrompt = document.getElementById('closePrompt');
+    const posterTemplate = document.getElementById('posterTemplate');
+    const fusionSVG = document.getElementById('fusion');
+    const barsGroup = document.getElementById('bars');
+    const curvePath = document.getElementById('curve');
+    const nodesGroup = document.getElementById('nodes');
+
+    let isCreative = false;
+    let lowPolyMode = false;
+
+    const posters = [
+      {
+        title: 'Ledger in Bloom',
+        caption: 'The discipline of double-entry embraced by flowing petals.',
+        prompt: 'Ultra-wide shot of a ledger morphing into blooming flowers, cinematic lighting, vaporwave hues, 8k, meticulous linework, commerce meets art.'
+      },
+      {
+        title: 'Spectral Forecast',
+        caption: 'Profit curves refracted as crystalline light.',
+        prompt: 'Abstract glass sculpture shaped like a financial forecast curve, luminous neon edges, foggy gallery, volumetric light, octane render style.'
+      },
+      {
+        title: 'Human Capital',
+        caption: 'Portrait of collaboration woven with data streams.',
+        prompt: 'Group of diverse students collaborating, holographic charts swirling around, painterly brush strokes blended with hologram UI, soft focus, cinematic.'
+      },
+      {
+        title: 'Quiet Numbers',
+        caption: 'A meditative ledger of memories.',
+        prompt: 'Minimalist composition of ink-dipped abacus beads floating in water, ripples of light, macro photography, poetic mood, high detail.'
+      },
+      {
+        title: 'Synesthetic Audit',
+        caption: 'Soundwaves cross-check the balance sheet.',
+        prompt: 'Audio waveform transforming into balanced scales, holographic textures, dark background, glowing particles, 3d illustration.'
+      },
+      {
+        title: 'Gradient Dividend',
+        caption: 'Future value expressed as chromatic dawn.',
+        prompt: 'Sunrise over abstract city built from spreadsheets, gradient skies, minimal geometry, matte material, cinematic grade.'
+      }
+    ];
+
+    function populateCarousel() {
+      const fragment = document.createDocumentFragment();
+      posters.forEach((poster, index) => {
+        const node = posterTemplate.content.cloneNode(true);
+        const article = node.querySelector('article');
+        const figure = node.querySelector('figure');
+        const title = node.querySelector('h3');
+        const caption = node.querySelector('p');
+        const button = node.querySelector('button');
+        figure.textContent = `Poster ${index + 1}`;
+        title.textContent = poster.title;
+        caption.textContent = poster.caption;
+        button.addEventListener('click', () => openPrompt(poster));
+        fragment.appendChild(node);
+      });
+      carousel.appendChild(fragment);
+    }
+
+    function openPrompt(poster) {
+      promptTitle.textContent = poster.title;
+      promptBody.textContent = poster.prompt;
+      promptPanel.classList.add('open');
+    }
+
+    closePrompt.addEventListener('click', () => promptPanel.classList.remove('open'));
+    promptPanel.addEventListener('click', (event) => {
+      if (event.target === promptPanel) {
+        promptPanel.classList.remove('open');
+      }
+    });
+
+    function toggleTheme() {
+      isCreative = !isCreative;
+      document.body.classList.toggle('creative', isCreative);
+      themeToggle.textContent = isCreative ? 'Switch to Corporate Mode' : 'Switch to Creative Mode';
+      if (!isCreative) document.body.classList.add('corporate');
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    function updateHeroDepth(event) {
+      const rect = heroStage.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      heroText.style.transform = `rotateY(${x * 18}deg) rotateX(${-y * 12}deg)`;
+      heroText.querySelectorAll('span').forEach((span, index) => {
+        const offset = (index - 2.5) * 6;
+        span.style.transform = `translateZ(${Math.sin(x * Math.PI + index) * 20}px) translateY(${y * offset}px)`;
+      });
+    }
+
+    heroStage.addEventListener('pointermove', updateHeroDepth);
+    heroStage.addEventListener('pointerleave', () => {
+      heroText.style.transform = '';
+      heroText.querySelectorAll('span').forEach(span => span.style.transform = '');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key.toLowerCase() === 'l') {
+        lowPolyMode = !lowPolyMode;
+        heroText.classList.toggle('low-poly', lowPolyMode);
+        fusionSVG.classList.toggle('low-poly', lowPolyMode);
+        curvePath.style.strokeDasharray = lowPolyMode ? '8 12' : '';
+        curvePath.style.opacity = lowPolyMode ? '0.7' : '1';
+        nodesGroup.querySelectorAll('circle').forEach(circle => {
+          circle.classList.toggle('wire', lowPolyMode);
+        });
+      }
+    });
+
+    const webgl = {
+      canvas: document.getElementById('ink'),
+      gl: null,
+      program: null,
+      startTime: performance.now(),
+      pointer: { x: 0.5, y: 0.5 },
+      raf: 0
+    };
+
+    function createShader(gl, type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        console.error(gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+      }
+      return shader;
+    }
+
+    function createProgram(gl, vertexSource, fragmentSource) {
+      const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexSource);
+      const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentSource);
+      const program = gl.createProgram();
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error(gl.getProgramInfoLog(program));
+        return null;
+      }
+      return program;
+    }
+
+    function initWebGL() {
+      const gl = webgl.canvas.getContext('webgl');
+      if (!gl) {
+        console.warn('WebGL not supported');
+        return;
+      }
+      webgl.gl = gl;
+      const vertexSource = `
+        attribute vec2 position;
+        void main() {
+          gl_Position = vec4(position, 0.0, 1.0);
+        }
+      `;
+      const fragmentSource = `
+        precision mediump float;
+        uniform float u_time;
+        uniform vec2 u_resolution;
+        uniform vec2 u_pointer;
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453123);
+        }
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          float a = hash(i);
+          float b = hash(i + vec2(1.0, 0.0));
+          float c = hash(i + vec2(0.0, 1.0));
+          float d = hash(i + vec2(1.0, 1.0));
+          vec2 u = f * f * (3.0 - 2.0 * f);
+          return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+        }
+        void main() {
+          vec2 st = gl_FragCoord.xy / u_resolution.xy;
+          st.x *= u_resolution.x / u_resolution.y;
+          float t = u_time * 0.08;
+          vec2 center = u_pointer + vec2(0.0, sin(u_time * 0.2) * 0.02);
+          float flow = noise((st * 3.0) + t);
+          float flow2 = noise((st * 4.6) - t * 1.6);
+          float mask = smoothstep(0.0, 0.35, 1.0 - distance(st, center));
+          float ink = mix(flow, flow2, mask);
+          vec3 col = mix(vec3(0.07, 0.1, 0.16), vec3(0.03, 0.02, 0.1), ink);
+          col += mask * 0.35;
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      webgl.program = createProgram(gl, vertexSource, fragmentSource);
+      gl.useProgram(webgl.program);
+
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1, -1,
+        1, -1,
+        -1, 1,
+        -1, 1,
+        1, -1,
+        1, 1
+      ]), gl.STATIC_DRAW);
+
+      const positionLoc = gl.getAttribLocation(webgl.program, 'position');
+      gl.enableVertexAttribArray(positionLoc);
+      gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+      webgl.uniforms = {
+        time: gl.getUniformLocation(webgl.program, 'u_time'),
+        resolution: gl.getUniformLocation(webgl.program, 'u_resolution'),
+        pointer: gl.getUniformLocation(webgl.program, 'u_pointer')
+      };
+
+      const resize = () => {
+        const displayWidth = webgl.canvas.clientWidth * window.devicePixelRatio;
+        const displayHeight = webgl.canvas.clientHeight * window.devicePixelRatio;
+        if (webgl.canvas.width !== displayWidth || webgl.canvas.height !== displayHeight) {
+          webgl.canvas.width = displayWidth;
+          webgl.canvas.height = displayHeight;
+        }
+        gl.viewport(0, 0, webgl.canvas.width, webgl.canvas.height);
+        gl.uniform2f(webgl.uniforms.resolution, webgl.canvas.width, webgl.canvas.height);
+      };
+
+      const render = (now) => {
+        resize();
+        const time = (now - webgl.startTime) / 1000;
+        gl.uniform1f(webgl.uniforms.time, time);
+        gl.uniform2f(webgl.uniforms.pointer, webgl.pointer.x, webgl.pointer.y);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        webgl.raf = requestAnimationFrame(render);
+      };
+
+      render(performance.now());
+
+      heroStage.addEventListener('pointermove', (event) => {
+        const rect = webgl.canvas.getBoundingClientRect();
+        webgl.pointer.x = (event.clientX - rect.left) / rect.width;
+        webgl.pointer.y = 1.0 - (event.clientY - rect.top) / rect.height;
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          cancelAnimationFrame(webgl.raf);
+        } else {
+          webgl.startTime = performance.now();
+          render(performance.now());
+        }
+      });
+
+      window.addEventListener('resize', resize);
+    }
+
+    function animateBars() {
+      const barData = [120, 180, 240, 210, 260, 300];
+      const width = 60;
+      const baseY = 300;
+      barsGroup.innerHTML = '';
+      barData.forEach((height, index) => {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', 80 + index * 110);
+        rect.setAttribute('width', width);
+        rect.setAttribute('y', baseY - 4);
+        rect.setAttribute('height', 0);
+        rect.setAttribute('rx', 12);
+        rect.setAttribute('fill', 'url(#barGradient)');
+        rect.style.transition = `height 1.4s ${0.2 + index * 0.08}s cubic-bezier(0.22, 1, 0.36, 1), y 1.4s ${0.2 + index * 0.08}s cubic-bezier(0.22, 1, 0.36, 1)`;
+        requestAnimationFrame(() => {
+          rect.setAttribute('height', height);
+          rect.setAttribute('y', baseY - height);
+        });
+        barsGroup.appendChild(rect);
+      });
+    }
+
+    function animateCurve() {
+      const points = [
+        [80, 220],
+        [180, 140],
+        [320, 160],
+        [420, 90],
+        [560, 110],
+        [680, 60],
+        [760, 120]
+      ];
+      const path = points.reduce((acc, point, index) => {
+        if (index === 0) return `M ${point[0]} ${point[1]}`;
+        const prev = points[index - 1];
+        const cp1x = prev[0] + 60;
+        const cp1y = prev[1] - 80;
+        const cp2x = point[0] - 60;
+        const cp2y = point[1] + 80;
+        return acc + ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${point[0]} ${point[1]}`;
+      }, '');
+      curvePath.setAttribute('d', path);
+      curvePath.style.strokeDasharray = points.length * 120;
+      curvePath.style.strokeDashoffset = points.length * 120;
+      curvePath.style.transition = 'stroke-dashoffset 2.2s cubic-bezier(0.22, 1, 0.36, 1)';
+      requestAnimationFrame(() => {
+        curvePath.style.strokeDashoffset = '0';
+      });
+      nodesGroup.innerHTML = '';
+      const objectives = [
+        'Curated Industry Labs',
+        'Creative Analytics Workshops',
+        'Live Brand Studios',
+        'Immersive Exhibitions'
+      ];
+      objectives.forEach((label, index) => {
+        const progress = (index + 1) / (objectives.length + 1);
+        const x = 120 + progress * 520;
+        const y = 150 + Math.sin(progress * Math.PI * 1.2) * -60;
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', x);
+        circle.setAttribute('cy', y);
+        circle.setAttribute('r', 9);
+        circle.setAttribute('fill', 'var(--accent)');
+        circle.style.filter = 'url(#glow)';
+        circle.style.transition = `r 0.5s ${0.8 + index * 0.18}s ease, opacity 0.6s ${0.8 + index * 0.18}s ease`;
+        circle.style.opacity = '0';
+        requestAnimationFrame(() => {
+          circle.style.opacity = '1';
+          circle.setAttribute('r', 12);
+        });
+        circle.addEventListener('mouseenter', () => showTooltip(label, x, y));
+        circle.addEventListener('mouseleave', hideTooltip);
+        nodesGroup.appendChild(circle);
+      });
+    }
+
+    const tooltip = document.createElement('div');
+    tooltip.style.position = 'absolute';
+    tooltip.style.background = 'rgba(6, 8, 24, 0.94)';
+    tooltip.style.color = '#f6f7fb';
+    tooltip.style.padding = '8px 12px';
+    tooltip.style.borderRadius = '12px';
+    tooltip.style.fontSize = '0.85rem';
+    tooltip.style.pointerEvents = 'none';
+    tooltip.style.opacity = '0';
+    tooltip.style.transition = 'opacity 200ms ease, transform 200ms ease';
+    tooltip.style.transform = 'translate(-50%, -10px)';
+    tooltip.style.willChange = 'transform';
+    tooltip.style.zIndex = '10';
+    tooltip.innerText = '';
+    fusionSVG.parentElement.appendChild(tooltip);
+
+    function showTooltip(text, x, y) {
+      tooltip.textContent = text;
+      const rect = fusionSVG.getBoundingClientRect();
+      tooltip.style.left = `${x / 800 * rect.width + rect.left - fusionSVG.parentElement.getBoundingClientRect().left}px`;
+      tooltip.style.top = `${y / 320 * rect.height + rect.top - fusionSVG.parentElement.getBoundingClientRect().top - 24}px`;
+      tooltip.style.opacity = '1';
+      tooltip.style.transform = 'translate(-50%, -18px)';
+    }
+
+    function hideTooltip() {
+      tooltip.style.opacity = '0';
+      tooltip.style.transform = 'translate(-50%, -10px)';
+    }
+
+    document.getElementById('joinBtn').addEventListener('click', () => {
+      window.alert('Thank you for your interest! Reach out to fanoon@university.edu to join.');
+    });
+
+    function init() {
+      populateCarousel();
+      initWebGL();
+      animateBars();
+      animateCurve();
+    }
+
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>
