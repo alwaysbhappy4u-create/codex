@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medieval Poetry Interactive Deck</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      --bg: #f5f5f5;
+      --fg: #222;
+      --accent: #5b4b8a;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-align: center;
+    }
+    .deck {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+    .slide {
+      display: none;
+      width: min(900px, 95vw);
+      min-height: 60vh;
+      background: white;
+      color: #222;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      padding: 2rem;
+      position: relative;
+    }
+    .slide.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+    .poll, .prompt {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: rgba(91,75,138,0.08);
+      border-radius: 12px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      background: rgba(91,75,138,0.15);
+      border-radius: 8px;
+      margin-right: 0.4rem;
+      font-size: 0.85rem;
+    }
+    footer {
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.8rem;
+      color: #555;
+    }
+    ol, ul {
+      padding-left: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Medieval Poetry Adventure</h1>
+    <p>Let’s explore voices, values, and vibes from the past—and compare them with our world today.</p>
+  </header>
+  <div class="deck" id="deck">
+    <!-- Slides -->
+  </div>
+  <div class="nav">
+    <button id="prev">Back</button>
+    <span id="progress">Slide 1 / 15</span>
+    <button id="next">Next</button>
+  </div>
+  <footer>
+    Built for quick sharing with your study squad. Tap, react, discuss!
+  </footer>
+  <template id="slides-template">
+    <section class="slide active">
+      <h2>01 · Warm-up Check-in</h2>
+      <p>When you hear <strong>"Medieval poetry"</strong>, what pops up first—armor, monks, or memes? Pop your guess in chat!</p>
+      <div class="poll">
+        <p><strong>Quick poll:</strong> Which word feels closest to your vibe?</p>
+        <label><input type="radio" name="poll1" /> Storytelling</label><br />
+        <label><input type="radio" name="poll1" /> Worship</label><br />
+        <label><input type="radio" name="poll1" /> Adventure</label>
+      </div>
+      <p class="prompt">Keep an eye on how poets balanced faith, community, and courage—just like we do in contemporary Pakistan.</p>
+    </section>
+    <section class="slide">
+      <h2>02 · Time Travel Snapshot</h2>
+      <p><span class="badge">Context</span> 700–1400 CE in Europe: monasteries copying texts, courts celebrating knights, and communities bonding over songs.</p>
+      <p><span class="badge">Compare</span> Today, our campuses mix WhatsApp study groups, qawwalis, and spoken word nights—different tools, same need for connection and meaning.</p>
+    </section>
+    <section class="slide">
+      <h2>03 · Elegy &amp; Heroic Poetry</h2>
+      <p>Elegies mourn loss; heroic poems hype legendary bravery. Think of them as ancient versions of tribute posts plus cinematic trailer voice-overs.</p>
+      <ul>
+        <li><strong>Tone:</strong> Reflective, solemn, yet proud.</li>
+        <li><strong>Audience:</strong> Monastic scribes, warrior elites, community listeners.</li>
+      </ul>
+      <div class="prompt">Question for you: which modern song captures both grief and pride? Drop a title.</div>
+    </section>
+    <section class="slide">
+      <h2>04 · Chivalric Romances</h2>
+      <p>These stories celebrate knightly codes—loyalty, honor, devotion to a lady or cause. Imagine a mash-up of <em>Diriliş: Ertuğrul</em> drama and medieval fan fiction.</p>
+      <p><span class="badge">Value clash?</span> European chivalry = serving a lord; our context often centers family elders, teachers, and spiritual guides.</p>
+    </section>
+    <section class="slide">
+      <h2>05 · Lyric &amp; Ballad Energy</h2>
+      <p>Lyrics: short, personal, musical. Ballads: narrative songs with refrains—perfect for communal singing. Picture hostel friends repeating the chorus until lights-out.</p>
+      <p class="prompt">Try humming a refrain from a folk song you know. What feelings mirror those ballads?</p>
+    </section>
+    <section class="slide">
+      <h2>06 · Meet the Venerable Bede</h2>
+      <p>Bede (673–735) was a monk-historian. His <em>Ecclesiastical History of the English People</em> mixes factual chronicles with poetic storytelling.</p>
+      <ul>
+        <li><strong>Faith lens:</strong> Christianity guiding narratives.</li>
+        <li><strong>Resonance:</strong> Similar to how we link history with spirituality in Islamic studies circles.</li>
+      </ul>
+    </section>
+    <section class="slide">
+      <h2>07 · Bede’s Legacy Check</h2>
+      <p>Why care? Bede shows how history writing can feel poetic and purposeful, reinforcing community identity—like documenting student volunteer projects today.</p>
+      <div class="poll">
+        <p>Does storytelling make history easier to remember?</p>
+        <label><input type="checkbox" /> Absolutely</label><br />
+        <label><input type="checkbox" /> Depends on the storyteller</label>
+      </div>
+    </section>
+    <section class="slide">
+      <h2>08 · Caedmon &amp; the Hymn</h2>
+      <p>Caedmon (fl. 658–680) was a shy herdsman who, according to Bede, received divine inspiration to sing about creation.</p>
+      <p><strong><em>Caedmon’s Hymn</em></strong> = Old English praise poem celebrating God as creator. Think nasheed but in early English alliterative verse.</p>
+      <div class="prompt">If you had to improvise a gratitude poem tonight, what theme would you pick?</div>
+    </section>
+    <section class="slide">
+      <h2>09 · John Wycliffe</h2>
+      <p>Wycliffe (c. 1330–1384) pushed for English scriptures. His followers, the Lollards, used sermons and verse to reach ordinary believers.</p>
+      <p><span class="badge">Contemporary echo</span> Student-led study circles translating big ideas into Urdu or Punjabi for wider access.</p>
+    </section>
+    <section class="slide">
+      <h2>10 · William Langland</h2>
+      <p>Langland (c. 1332–1386) wrote <em>Piers Plowman</em>, a dream-vision poem critiquing corruption. Satire with a spiritual backbone.</p>
+      <p><span class="badge">Compare</span> Think of Pakistani satirical shows calling out injustice while invoking moral duty.</p>
+    </section>
+    <section class="slide">
+      <h2>11 · Text Spotlight · <em>Ecclesiastical History</em></h2>
+      <p>Bede blends Latin prose with poetic anecdotes. Look for:</p>
+      <ul>
+        <li>Miracle stories that reinforce faith.</li>
+        <li>Community-building tales echoing modern service-learning narratives.</li>
+      </ul>
+      <div class="prompt">Ask the group: Is history still persuasive when it aims to inspire faith?</div>
+    </section>
+    <section class="slide">
+      <h2>12 · Text Spotlight · <em>Caedmon’s Hymn</em></h2>
+      <p>Structure relies on alliteration and compound words. Try spotting paired sounds—it’s like our love for rhyming couplets in Punjabi or Urdu poetry slams.</p>
+      <div class="poll">
+        <p>Which line feels more powerful?</p>
+        <label><input type="radio" name="poll2" /> Praise for creation</label><br />
+        <label><input type="radio" name="poll2" /> Praise for mercy</label>
+      </div>
+    </section>
+    <section class="slide">
+      <h2>13 · Folk Ballads: “I Have a Young Sister” &amp; “Lord Randall”</h2>
+      <p>These ballads use dialogue and repetition. Emotions swing from playful teasing to tragic betrayal—like stories told in a hostel courtyard at midnight.</p>
+      <p><span class="badge">Gender lens</span> Notice how female voices appear as caretakers or tricksters. Compare with how women negotiate voice in contemporary student societies.</p>
+    </section>
+    <section class="slide">
+      <h2>14 · “The Three Ravens”</h2>
+      <p>Imagery of loyal animals and grieving lovers highlights communal duty. In South Asian contexts, think of folk tales where community shows up after tragedy.</p>
+      <div class="prompt">Would your friend group stay with a fallen hero until help arrives? Share a story.</div>
+    </section>
+    <section class="slide">
+      <h2>15 · Wrap-up &amp; Action Step</h2>
+      <ul>
+        <li>Elegy &amp; Heroic: honor and remembrance.</li>
+        <li>Chivalric: duty and devotion.</li>
+        <li>Lyric &amp; Ballad: shared feelings and community.</li>
+      </ul>
+      <p>Challenge: create a short WhatsApp voice note retelling one of these poems through your campus lens. Who’s in?</p>
+      <p class="prompt">Drop lingering questions. Which poet would you invite to your study circle?</p>
+    </section>
+  </template>
+  <script>
+    const slides = Array.from(document.querySelector('#slides-template').content.children);
+    const deck = document.getElementById('deck');
+    slides.forEach((slide, index) => {
+      slide.dataset.index = index + 1;
+      deck.appendChild(slide.cloneNode(true));
+    });
+
+    const slideEls = Array.from(document.querySelectorAll('.slide'));
+    let current = 0;
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const progress = document.getElementById('progress');
+
+    function render() {
+      slideEls.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === current);
+      });
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slideEls.length - 1;
+      progress.textContent = `Slide ${current + 1} / ${slideEls.length}`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (current > 0) {
+        current--;
+        render();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (current < slideEls.length - 1) {
+        current++;
+        render();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') {
+        nextBtn.click();
+      }
+      if (event.key === 'ArrowLeft') {
+        prevBtn.click();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
