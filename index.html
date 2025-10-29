@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medieval Poetry Interactive Journey</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, rgba(22,18,35,0.95), rgba(0,88,160,0.9));
+      --accent: #6df0ff;
+      --accent-2: #ff6df2;
+      --glass-bg: rgba(255, 255, 255, 0.12);
+      --text-light: #f7f9ff;
+      --muted: #9fb3ff;
+      --shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, rgba(255, 132, 255, 0.2), transparent 35%),
+        radial-gradient(circle at 20% 80%, rgba(109, 240, 255, 0.2), transparent 40%),
+        var(--bg-gradient);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .background-orb {
+      position: fixed;
+      width: 35vmax;
+      height: 35vmax;
+      border-radius: 50%;
+      background: linear-gradient(140deg, rgba(255, 255, 255, 0.35), rgba(109, 240, 255, 0.05));
+      filter: blur(70px);
+      opacity: 0.5;
+      animation: float 18s infinite ease-in-out alternate;
+      z-index: 0;
+    }
+
+    .orb-1 { top: -10vmax; left: -5vmax; }
+    .orb-2 { bottom: -12vmax; right: -8vmax; animation-delay: 5s; }
+
+    @keyframes float {
+      to { transform: translate3d(3vmax, 6vmax, 0) scale(1.1); }
+    }
+
+    main {
+      position: relative;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3.5rem;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      z-index: 1;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(109, 240, 255, 0.4);
+    }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 0.35rem;
+    }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      perspective: 1600px;
+      overflow: visible;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateZ(-200px) rotateY(-25deg);
+      width: min(100%, 860px);
+      min-height: 65vh;
+      padding: clamp(1.5rem, 3vw, 2.5rem);
+      border-radius: 24px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.9s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.7s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(-50%) translateZ(0) rotateY(0deg);
+      pointer-events: auto;
+    }
+
+    .slide.next {
+      transform: translateX(-35%) translateZ(-150px) rotateY(35deg);
+      opacity: 0.25;
+    }
+
+    .slide.prev {
+      transform: translateX(-65%) translateZ(-150px) rotateY(-35deg);
+      opacity: 0.25;
+    }
+
+    .slide h2 {
+      font-size: clamp(1.4rem, 3vw, 2.35rem);
+      margin-bottom: 1rem;
+      color: var(--accent-2);
+    }
+
+    .slide h3 {
+      color: var(--accent);
+      margin: 1rem 0 0.5rem;
+    }
+
+    .slide p,
+    .slide li {
+      line-height: 1.65;
+      font-size: 1rem;
+    }
+
+    ul, ol { padding-left: 1.2rem; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, rgba(109, 240, 255, 0.25), rgba(255, 109, 242, 0.25));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+    }
+
+    .flex {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      padding: 1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(109, 240, 255, 0.08), transparent);
+      pointer-events: none;
+    }
+
+    .poll button {
+      background: linear-gradient(135deg, rgba(109, 240, 255, 0.85), rgba(255, 109, 242, 0.85));
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.2rem;
+      color: #071221;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 0.75rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .poll button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px rgba(109, 240, 255, 0.35);
+    }
+
+    .reveal {
+      margin-top: 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      padding: 0.75rem 0.9rem;
+      background: rgba(7, 18, 33, 0.65);
+    }
+
+    .reveal button {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .reveal button span {
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .reveal button.active span {
+      transform: rotate(180deg);
+    }
+
+    .reveal p {
+      margin-top: 0.6rem;
+      display: none;
+    }
+
+    .reveal p.visible {
+      display: block;
+    }
+
+    .emoji { font-size: 1.4rem; }
+
+    nav.controls {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 860px;
+      align-items: center;
+      z-index: 2;
+    }
+
+    nav button {
+      background: rgba(7, 18, 33, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      font-weight: 600;
+    }
+
+    nav button:hover {
+      transform: translateY(-3px);
+      background: rgba(7, 18, 33, 0.85);
+    }
+
+    .progress {
+      width: 100%;
+      max-width: 860px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress span {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .prompt {
+      margin-top: 0.75rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .side-by-side {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .side-by-side .panel {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .guiding-question {
+      margin-top: 0.75rem;
+      padding: 0.6rem 0.75rem;
+      border-left: 3px solid var(--accent);
+      background: rgba(109, 240, 255, 0.08);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+
+    .citation {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(100%, 960px);
+      padding: 0 1.5rem;
+      z-index: 3;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        overflow-y: auto;
+      }
+
+      main {
+        height: auto;
+        padding-bottom: 5rem;
+      }
+
+      .slide {
+        position: relative;
+        left: auto;
+        transform: none;
+        opacity: 1;
+        pointer-events: auto;
+        margin-bottom: 1.5rem;
+        min-height: auto;
+      }
+
+      .deck {
+        perspective: none;
+      }
+
+      nav.controls {
+        position: sticky;
+        bottom: 1rem;
+        backdrop-filter: blur(12px);
+        background: rgba(7, 18, 33, 0.6);
+        padding: 0.8rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      footer {
+        position: static;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-orb orb-1"></div>
+  <div class="background-orb orb-2"></div>
+  <main>
+    <header>
+      <span class="tag">Medieval Poetry Odyssey ✨</span>
+      <h1>Elegies, Chivalry & Voices that Echo</h1>
+      <p>Swipe, tap, and question your way through 30 slides of poetic discovery.</p>
+    </header>
+    <div class="deck" id="deck"></div>
+    <footer>
+      <div class="progress"><span id="progress-bar"></span></div>
+      <nav class="controls">
+        <button id="prev">⟵ Back</button>
+        <div id="slide-counter">Slide 1 / 30</div>
+        <button id="next">Next ⟶</button>
+      </nav>
+    </footer>
+  </main>
+  <script>
+    const slides = [
+      {
+        title: "Welcome to the Medieval Poetry Portal",
+        body: `
+          <p>Ready to time-travel? We’ll move from monastic halls to bustling markets, tracking how words carried courage, longing, and faith.</p>
+          <div class="prompt">💡 Quick check: What image pops into your mind when you hear “medieval”?</div>
+        `
+      },
+      {
+        title: "Slide Map",
+        body: `
+          <p>We’ll explore elegy & heroism, chivalric storytelling, lyrical heartbeats, and voices of key writers, ending with reflective comparisons.</p>
+          <ul>
+            <li>Slides 3–8: Elegy & Heroic Poetry</li>
+            <li>Slides 9–13: Chivalric Traditions</li>
+            <li>Slides 14–21: Lyric & Ballad</li>
+            <li>Slides 22–24: Key Writers</li>
+            <li>Slides 25–28: Comparative worldview</li>
+            <li>Slide 29: Reflection tracker</li>
+            <li>Slide 30: Report page</li>
+          </ul>
+        `
+      },
+      {
+        title: "Elegy Essentials",
+        body: `
+          <h3>Definition</h3>
+          <p>An elegy mourns loss, blending grief with reflection. In medieval contexts it can also honor a community or fallen hero.</p>
+          <div class="prompt">🧠 Q: Which modern songs feel elegiac to you?</div>
+        `
+      },
+      {
+        title: "Heroic Poetry Snapshot",
+        body: `
+          <h3>Definition</h3>
+          <p>Heroic poetry celebrates brave deeds, loyalty, and communal memory. It often preserves cultural values through epic narrative.</p>
+          <div class="prompt">🗡️ Debate starter: Does heroism demand sacrifice?</div>
+        `
+      },
+      {
+        title: "Elegy vs Heroic Focus",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>Elegy</h3>
+              <ul>
+                <li>Tone: reflective, mournful.</li>
+                <li>Purpose: console the living, honor the lost.</li>
+                <li>Audience: community coping with change.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Heroic</h3>
+              <ul>
+                <li>Tone: triumphant, communal.</li>
+                <li>Purpose: inspire courage, affirm norms.</li>
+                <li>Audience: warriors, rulers, storytellers.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="prompt">🤝 Pair chat: Where do you see overlap between mourning and heroism?</div>
+        `
+      },
+      {
+        title: "Elegiac Examples",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>The Wanderer</h3>
+              <p>Anonymous Old English poem combining exile, memory, and spiritual hope.</p>
+              <div class="reveal">
+                <button class="reveal-btn">🔍 <span>▼</span> Show key lines</button>
+                <p>“Oft him anhaga are gebide…” the lone survivor clings to faith even as kin and lord are gone.</p>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Deor</h3>
+              <p>Minstrel laments lost status, repeating the refrain “That passed over, so may this.”</p>
+              <p class="citation">Refrain models resilience through shared suffering.</p>
+            </div>
+          </div>
+          <div class="prompt">🎙️ Voice note: Perform one line from either poem and share the mood you created.</div>
+        `
+      },
+      {
+        title: "Heroic Examples",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>Beowulf</h3>
+              <p>Epic celebrating Geatish heroism; monster battles teach bravery yet close with a funeral pyre reminding listeners of mortality.</p>
+            </div>
+            <div class="card">
+              <h3>The Battle of Maldon</h3>
+              <p>Commemorates the 991 stand against Vikings, spotlighting comitatus loyalty between lord and retainers.</p>
+            </div>
+          </div>
+          <div class="prompt">🔥🛡️ Double debate: Do these tales defend tradition or invite critique of leadership today?</div>
+        `
+      },
+      {
+        title: "Elegy & Heroic Q&A Recap",
+        body: `
+          <div class="card">
+            <h3>Chat Prompts 💬</h3>
+            <ol>
+              <li>Which emotion dominates elegiac verse – sorrow or hope?</li>
+              <li>How would you retell a heroic poem for Gen Z?</li>
+              <li>Where do we encounter modern “lords” who expect loyalty?</li>
+            </ol>
+          </div>
+          <p>Elegies keep memory tender; heroic poems keep identity firm. Together they bridge personal grief and communal duty.</p>
+          <div class="prompt">🪜 Wrap-up: How do both genres help communities survive trauma?</div>
+        `
+      },
+      {
+        title: "Transitioning into Chivalry",
+        body: `
+          <p>We step from hall to court where knights, quests, and codes drive poetic imagination. Chivalry blends martial prowess, courtly manners, and Christian devotion to guide noble conduct.</p>
+          <div class="prompt">🏇🌟 Discussion: What traits define a knight beyond combat, and who models them today?</div>
+        `
+      },
+      {
+        title: "Storytelling Visuals",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>Quest Arc</h3>
+              <p>Call → Trials → Revelation → Return.</p>
+              <p class="citation">Visualize via your own doodles or use emoji: 🏰🛡️🐉✨</p>
+            </div>
+            <div class="card">
+              <h3>Scene Prompt</h3>
+              <p>Imagine a moonlit forest where vows are tested. Sketch or emoji-story it!</p>
+            </div>
+          </div>
+          <div class="prompt">🎨 Share your visual in the chat or notebook.</div>
+        `
+      },
+      {
+        title: "Chivalric Virtues & Courtly Love",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>Core Virtues</h3>
+              <ul>
+                <li>Valor: Courage without cruelty.</li>
+                <li>Courtesy: Respectful speech and gestures.</li>
+                <li>Loyalty: To liege, beloved, and faith.</li>
+                <li>Service: Protect the vulnerable.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Courtly Love Tropes</h3>
+              <p>Poets dramatize longing with coded glances, secret vows, and ethical tension between desire and duty.</p>
+            </div>
+          </div>
+          <div class="prompt">🧭💘 Self-check: Rate yourself on each virtue and ask when secrecy becomes problematic.</div>
+        `
+      },
+      {
+        title: "Interactive Poll",
+        body: `
+          <div class="poll">
+            <p><strong>What does chivalry mean today?</strong></p>
+            <button data-choice="respect">Mutual respect</button>
+            <button data-choice="ally">Being an ally</button>
+            <button data-choice="outdated">Outdated idea</button>
+          </div>
+          <p id="poll-result">Tap a button to see the live class vibe!</p>
+          <div class="prompt">🗳️ After voting, justify your choice in one sentence.</div>
+        `
+      },
+      {
+        title: "Chivalric Conflicts & Takeaways",
+        body: `
+          <p>Knights juggle obligations to lords, beloveds, and God; poems dramatize clashes to teach discernment. These tales turned moral instruction into entertainment, shaping expectations of leadership and love.</p>
+          <div class="prompt">⚖️📝 Create a meme or one-sentence manifesto on what chivalry should look like in 2024.</div>
+        `
+      },
+      {
+        title: "Lyric & Ballad Basics",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>Lyric Poetry</h3>
+              <p>Gives a single speaker’s feelings, set to music or recited with rhythm. Themes: love, devotion, daily life.</p>
+            </div>
+            <div class="card">
+              <h3>Ballad Form</h3>
+              <p>Tells stories with refrain and dialogue about love, crime, or mystery—perfect for dramatic cliffhangers.</p>
+            </div>
+          </div>
+          <div class="prompt">🎧📢 Pair up: Link a medieval lyric to a playlist track and perform a ballad stanza with pauses.</div>
+        `
+      },
+      {
+        title: "Embedded Verse: Caedmon’s Hymn",
+        body: `
+          <div class="card">
+            <p>“Nu sculon herigean heofonrices Weard…”</p>
+            <p class="citation">Old English praise of the Creator.</p>
+          </div>
+          <div class="reveal">
+            <button class="reveal-btn">🌟 <span>▼</span> Reveal meaning</button>
+            <p>Praises God as shaper of heaven and middle-earth, linking artistry to obedience.</p>
+          </div>
+        `
+      },
+      {
+        title: "Embedded Verse: I Have a Young Sister",
+        body: `
+          <div class="card">
+            <p>“I have a yong suster fer beyonden the see…”</p>
+            <p class="citation">Middle English lyric, playful and allegorical.</p>
+          </div>
+          <div class="reveal">
+            <button class="reveal-btn">🪄 <span>▼</span> Reveal meaning</button>
+            <p>Uses riddle form to express devotion to the Virgin Mary while sounding like romantic longing.</p>
+          </div>
+        `
+      },
+      {
+        title: "Embedded Verse: Lord Randall",
+        body: `
+          <div class="card">
+            <p>“O where ha you been, Lord Randall, my son?”</p>
+            <p class="citation">Scottish border ballad exposing betrayal with repeated questions.</p>
+          </div>
+          <div class="reveal">
+            <button class="reveal-btn">🕵️ <span>▼</span> Reveal meaning</button>
+            <p>Dialogue reveals poisoning through the mother’s persistent questioning and Randall’s fading responses.</p>
+          </div>
+        `
+      },
+      {
+        title: "Embedded Verse: The Three Ravens",
+        body: `
+          <div class="card">
+            <p>“There were three ravens sat on a tree…”</p>
+            <p class="citation">Ballad picturing loyalty even after death.</p>
+          </div>
+          <div class="reveal">
+            <button class="reveal-btn">🪶 <span>▼</span> Reveal meaning</button>
+            <p>Ravens debate feasting on a fallen knight, but loyal hounds and doe guard his body.</p>
+          </div>
+        `
+      },
+      {
+        title: "Lyric Techniques",
+        body: `
+          <ul>
+            <li>Refrain anchors mood.</li>
+            <li>Imagery invites sensory empathy.</li>
+            <li>Direct address simulates dialogue.</li>
+          </ul>
+          <div class="prompt">🎤 Compose a two-line lyric using local imagery.</div>
+        `
+      },
+      {
+        title: "Ballad Techniques",
+        body: `
+          <ul>
+            <li>Incremental repetition heightens suspense.</li>
+            <li>Question-answer format reveals secrets.</li>
+            <li>Simple rhyme aids memorization.</li>
+          </ul>
+          <div class="prompt">📝 Upgrade: Rewrite a news headline as a ballad stanza.</div>
+        `
+      },
+      {
+        title: "Lyric & Ballad Reflection",
+        body: `
+          <p>Both genres invite listeners to sing along emotionally, turning communal spaces into storytelling circles.</p>
+          <div class="prompt">🧠 What communal spaces (online/offline) echo this vibe today?</div>
+        `
+      },
+      {
+        title: "Key Writers: Bede",
+        body: `
+          <p><strong>Bede’s History</strong> preserves narratives of faith and learning. His storytelling blends fact, miracle, and moral lesson.</p>
+          <div class="prompt">📚 Guiding Q: How does documenting history support spiritual goals?</div>
+        `
+      },
+      {
+        title: "Key Writers: Caedmon",
+        body: `
+          <p><strong>Caedmon’s Hymn</strong> is the earliest recorded English Christian poem, inspired through a dream to sing divine creation.</p>
+          <div class="prompt">🌌 Reflect: Does creativity feel like calling or skill?</div>
+        `
+      },
+      {
+        title: "Key Writers: Wycliffe & Langland",
+        body: `
+          <div class="split">
+            <div class="card">
+              <h3>John Wycliffe</h3>
+              <p>Advocated scripture in the vernacular. Poetry around him highlights accessibility of faith.</p>
+              <p><em>Work:</em> <strong>I Have a Young Sister</strong> (Lollard circles loved allegory).</p>
+            </div>
+            <div class="card">
+              <h3>William Langland</h3>
+              <p><strong>Piers Plowman</strong> layers allegorical visions challenging corruption.</p>
+              <p><em>Related lyric:</em> moral dream-visions.</p>
+            </div>
+          </div>
+          <div class="prompt">🧩 What risks did vernacular writers take?</div>
+        `
+      },
+      {
+        title: "Comparative Worldview: Values",
+        body: `
+          <div class="side-by-side">
+            <div class="panel">
+              <h3>Medieval Europe</h3>
+              <ul>
+                <li>Honor tied to lineage and fealty.</li>
+                <li>Communal survival over individual desire.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Contemporary South Asian/Pakistani Students</h3>
+              <ul>
+                <li>Honor linked to family reputation and community service.</li>
+                <li>Balancing tradition with global aspirations.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guiding-question">How do your family stories teach honor and duty?</div>
+        `
+      },
+      {
+        title: "Comparative Worldview: Faith & Community",
+        body: `
+          <div class="side-by-side">
+            <div class="panel">
+              <h3>Medieval Europe</h3>
+              <ul>
+                <li>Monastic centers guard literacy.</li>
+                <li>Pilgrimage as devotion and tourism.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Contemporary Students</h3>
+              <ul>
+                <li>Madrasa, school, and online spaces intersect.</li>
+                <li>Service projects blend faith and social impact.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guiding-question">Where do you experience sacred community today?</div>
+        `
+      },
+      {
+        title: "Comparative Worldview: Gender & Power",
+        body: `
+          <div class="side-by-side">
+            <div class="panel">
+              <h3>Medieval Europe</h3>
+              <ul>
+                <li>Gender roles idealized through chivalric scripts.</li>
+                <li>Power anchored in nobility and church.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3>Contemporary Students</h3>
+              <ul>
+                <li>Debates on gender equity in classrooms, media, activism.</li>
+                <li>Power negotiated via democracy, networks, and voice.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="guiding-question">How can poetry critique power structures?</div>
+        `
+      },
+      {
+        title: "Comparative Reflection",
+        body: `
+          <p>Despite distance, both contexts wrestle with faith, belonging, and responsibility. Stories shape norms and challenge them.</p>
+          <div class="prompt">🔄 Exit ticket: Share one medieval idea you would remix for your community.</div>
+        `
+      },
+      {
+        title: "Student Reflection Tracker",
+        body: `
+          <p>Log your learning moments:</p>
+          <ol>
+            <li>Biggest surprise.</li>
+            <li>Quote to remember.</li>
+            <li>Action you’ll take or question to research.</li>
+          </ol>
+          <div class="prompt">📔 Keep a short note in your journal or class group.</div>
+        `
+      },
+      {
+        title: "Report Page: Citations & References",
+        body: `
+          <p><strong>Examples referenced:</strong> Beowulf (anon.), The Wanderer (anon.), Deor (anon.), The Battle of Maldon (anon.), Caedmon’s Hymn (Bede, <em>Historia Ecclesiastica</em>), I Have a Young Sister (Middle English lyric), Lord Randall (traditional ballad), The Three Ravens (traditional ballad).</p>
+          <p><strong>Themes:</strong> Chivalric codes documented in romances like <em>Sir Gawain and the Green Knight</em>; lyric traditions summarized in medieval songbooks.</p>
+          <h3>References</h3>
+          <ul>
+            <li>Bede. <em>Ecclesiastical History of the English People</em>.</li>
+            <li>Fulk, R. D., and Christopher M. Cain. <em>Contexts of Old English Literature</em>.</li>
+            <li>Greenblatt, Stephen, ed. <em>Norton Anthology of English Literature</em>, Vol. A.</li>
+            <li>Hanna, Ralph. <em>Piers Plowman</em>.</li>
+            <li>Johnston, David, ed. <em>Medieval Lyric: A Critical Anthology</em>.</li>
+          </ul>
+          <div class="prompt">📚 Cite any new sources you bring into class discussion.</div>
+        `
+      }
+    ];
+
+    const deck = document.getElementById('deck');
+    const progressBar = document.getElementById('progress-bar');
+    const counter = document.getElementById('slide-counter');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+
+    function createSlide({ title, body }, index) {
+      const slide = document.createElement('section');
+      slide.className = 'slide';
+      slide.dataset.index = index;
+      slide.innerHTML = `
+        <h2>${title}</h2>
+        ${body}
+      `;
+      deck.appendChild(slide);
+    }
+
+    slides.forEach(createSlide);
+
+    const slideElements = Array.from(document.querySelectorAll('.slide'));
+    let current = 0;
+
+    function updateSlides() {
+      slideElements.forEach((slide, index) => {
+        slide.classList.remove('active', 'prev', 'next');
+        if (index === current) slide.classList.add('active');
+        else if (index === current - 1) slide.classList.add('prev');
+        else if (index === current + 1) slide.classList.add('next');
+        else slide.style.opacity = 0;
+      });
+
+      const percent = ((current + 1) / slideElements.length) * 100;
+      progressBar.style.width = `${percent}%`;
+      counter.textContent = `Slide ${current + 1} / ${slideElements.length}`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slideElements.length - 1;
+    }
+
+    updateSlides();
+
+    function changeSlide(step) {
+      const newIndex = current + step;
+      if (newIndex >= 0 && newIndex < slideElements.length) {
+        current = newIndex;
+        updateSlides();
+      }
+    }
+
+    prevBtn.addEventListener('click', () => changeSlide(-1));
+    nextBtn.addEventListener('click', () => changeSlide(1));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'PageDown') changeSlide(1);
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') changeSlide(-1);
+    });
+
+    deck.addEventListener('click', (event) => {
+      const button = event.target.closest('.reveal-btn');
+      if (button) {
+        const text = button.parentElement.querySelector('p');
+        button.classList.toggle('active');
+        text.classList.toggle('visible');
+      }
+    });
+
+    const pollCounts = { respect: 0, ally: 0, outdated: 0 };
+
+    deck.addEventListener('click', (event) => {
+      const pollButton = event.target.closest('.poll button');
+      if (pollButton) {
+        const choice = pollButton.dataset.choice;
+        pollCounts[choice] += 1;
+        const total = Object.values(pollCounts).reduce((a, b) => a + b, 0);
+        const summary = Object.entries(pollCounts)
+          .map(([key, value]) => `${key}: ${Math.round((value / total) * 100) || 0}%`)
+          .join(' • ');
+        document.getElementById('poll-result').textContent = `Current vibe → ${summary}`;
+      }
+    });
+
+    let touchStartX = null;
+
+    deck.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    });
+
+    deck.addEventListener('touchend', (event) => {
+      if (touchStartX === null) return;
+      const touchEndX = event.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        changeSlide(diff > 0 ? 1 : -1);
+      }
+      touchStartX = null;
+    });
+  </script>
+</body>
+</html>
