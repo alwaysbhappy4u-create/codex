@@ -397,414 +397,348 @@
   <script>
     const slides = [
       {
-        title: "Welcome to the Medieval Poetry Portal",
+        title: "Welcome to Our Medieval Poetry Hangout",
         body: `
-          <p>Ready to time-travel? We’ll move from monastic halls to bustling markets, tracking how words carried courage, longing, and faith.</p>
-          <div class="prompt">💡 Quick check: What image pops into your mind when you hear “medieval”?</div>
-        `
-      },
-      {
-        title: "Slide Map",
-        body: `
-          <p>We’ll explore elegy & heroism, chivalric storytelling, lyrical heartbeats, and voices of key writers, ending with reflective comparisons.</p>
+          <p>Hey friends! We’re stepping into a world of sung prayers, epic heroes, and ballads by the fireside.</p>
           <ul>
-            <li>Slides 3–8: Elegy & Heroic Poetry</li>
-            <li>Slides 9–13: Chivalric Traditions</li>
-            <li>Slides 14–21: Lyric & Ballad</li>
-            <li>Slides 22–24: Key Writers</li>
-            <li>Slides 25–28: Comparative worldview</li>
-            <li>Slide 29: Reflection tracker</li>
-            <li>Slide 30: Report page</li>
+            <li>We’ll explore elegy, heroic, chivalric, lyric, and ballad vibes.</li>
+            <li>Meet writers like Bede, Caedmon, Wycliffe, and Langland.</li>
+            <li>Connect medieval scenes with your own student context.</li>
           </ul>
-        `
+        `,
       },
       {
-        title: "Elegy Essentials",
+        title: "Quick Poll: First Impressions?",
         body: `
-          <h3>Definition</h3>
-          <p>An elegy mourns loss, blending grief with reflection. In medieval contexts it can also honor a community or fallen hero.</p>
-          <div class="prompt">🧠 Q: Which modern songs feel elegiac to you?</div>
-        `
-      },
-      {
-        title: "Heroic Poetry Snapshot",
-        body: `
-          <h3>Definition</h3>
-          <p>Heroic poetry celebrates brave deeds, loyalty, and communal memory. It often preserves cultural values through epic narrative.</p>
-          <div class="prompt">🗡️ Debate starter: Does heroism demand sacrifice?</div>
-        `
-      },
-      {
-        title: "Elegy vs Heroic Focus",
-        body: `
-          <div class="split">
-            <div class="card">
-              <h3>Elegy</h3>
-              <ul>
-                <li>Tone: reflective, mournful.</li>
-                <li>Purpose: console the living, honor the lost.</li>
-                <li>Audience: community coping with change.</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Heroic</h3>
-              <ul>
-                <li>Tone: triumphant, communal.</li>
-                <li>Purpose: inspire courage, affirm norms.</li>
-                <li>Audience: warriors, rulers, storytellers.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="prompt">🤝 Pair chat: Where do you see overlap between mourning and heroism?</div>
-        `
-      },
-      {
-        title: "Elegiac Examples",
-        body: `
-          <div class="split">
-            <div class="card">
-              <h3>The Wanderer</h3>
-              <p>Anonymous Old English poem combining exile, memory, and spiritual hope.</p>
-              <div class="reveal">
-                <button class="reveal-btn">🔍 <span>▼</span> Show key lines</button>
-                <p>“Oft him anhaga are gebide…” the lone survivor clings to faith even as kin and lord are gone.</p>
-              </div>
-            </div>
-            <div class="card">
-              <h3>Deor</h3>
-              <p>Minstrel laments lost status, repeating the refrain “That passed over, so may this.”</p>
-              <p class="citation">Refrain models resilience through shared suffering.</p>
-            </div>
-          </div>
-          <div class="prompt">🎙️ Voice note: Perform one line from either poem and share the mood you created.</div>
-        `
-      },
-      {
-        title: "Heroic Examples",
-        body: `
-          <div class="split">
-            <div class="card">
-              <h3>Beowulf</h3>
-              <p>Epic celebrating Geatish heroism; monster battles teach bravery yet close with a funeral pyre reminding listeners of mortality.</p>
-            </div>
-            <div class="card">
-              <h3>The Battle of Maldon</h3>
-              <p>Commemorates the 991 stand against Vikings, spotlighting comitatus loyalty between lord and retainers.</p>
-            </div>
-          </div>
-          <div class="prompt">🔥🛡️ Double debate: Do these tales defend tradition or invite critique of leadership today?</div>
-        `
-      },
-      {
-        title: "Elegy & Heroic Q&A Recap",
-        body: `
-          <div class="card">
-            <h3>Chat Prompts 💬</h3>
-            <ol>
-              <li>Which emotion dominates elegiac verse – sorrow or hope?</li>
-              <li>How would you retell a heroic poem for Gen Z?</li>
-              <li>Where do we encounter modern “lords” who expect loyalty?</li>
-            </ol>
-          </div>
-          <p>Elegies keep memory tender; heroic poems keep identity firm. Together they bridge personal grief and communal duty.</p>
-          <div class="prompt">🪜 Wrap-up: How do both genres help communities survive trauma?</div>
-        `
-      },
-      {
-        title: "Transitioning into Chivalry",
-        body: `
-          <p>We step from hall to court where knights, quests, and codes drive poetic imagination. Chivalry blends martial prowess, courtly manners, and Christian devotion to guide noble conduct.</p>
-          <div class="prompt">🏇🌟 Discussion: What traits define a knight beyond combat, and who models them today?</div>
-        `
-      },
-      {
-        title: "Storytelling Visuals",
-        body: `
-          <div class="split">
-            <div class="card">
-              <h3>Quest Arc</h3>
-              <p>Call → Trials → Revelation → Return.</p>
-              <p class="citation">Visualize via your own doodles or use emoji: 🏰🛡️🐉✨</p>
-            </div>
-            <div class="card">
-              <h3>Scene Prompt</h3>
-              <p>Imagine a moonlit forest where vows are tested. Sketch or emoji-story it!</p>
-            </div>
-          </div>
-          <div class="prompt">🎨 Share your visual in the chat or notebook.</div>
-        `
-      },
-      {
-        title: "Chivalric Virtues & Courtly Love",
-        body: `
-          <div class="split">
-            <div class="card">
-              <h3>Core Virtues</h3>
-              <ul>
-                <li>Valor: Courage without cruelty.</li>
-                <li>Courtesy: Respectful speech and gestures.</li>
-                <li>Loyalty: To liege, beloved, and faith.</li>
-                <li>Service: Protect the vulnerable.</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3>Courtly Love Tropes</h3>
-              <p>Poets dramatize longing with coded glances, secret vows, and ethical tension between desire and duty.</p>
-            </div>
-          </div>
-          <div class="prompt">🧭💘 Self-check: Rate yourself on each virtue and ask when secrecy becomes problematic.</div>
-        `
-      },
-      {
-        title: "Interactive Poll",
-        body: `
+          <p>What’s your gut reaction to “medieval poetry” right now?</p>
           <div class="poll">
-            <p><strong>What does chivalry mean today?</strong></p>
-            <button data-choice="respect">Mutual respect</button>
-            <button data-choice="ally">Being an ally</button>
-            <button data-choice="outdated">Outdated idea</button>
+            <button data-choice="respect">Respect the classics</button>
+            <button data-choice="ally">Curious ally</button>
+            <button data-choice="outdated">Feels outdated?</button>
           </div>
-          <p id="poll-result">Tap a button to see the live class vibe!</p>
-          <div class="prompt">🗳️ After voting, justify your choice in one sentence.</div>
-        `
+          <p id="poll-result">Current vibe → respect: 0% • ally: 0% • outdated: 0%</p>
+          <p class="tip">No wrong answers—we’re building the story together.</p>
+        `,
       },
       {
-        title: "Chivalric Conflicts & Takeaways",
+        title: "Time Travel Map",
         body: `
-          <p>Knights juggle obligations to lords, beloveds, and God; poems dramatize clashes to teach discernment. These tales turned moral instruction into entertainment, shaping expectations of leadership and love.</p>
-          <div class="prompt">⚖️📝 Create a meme or one-sentence manifesto on what chivalry should look like in 2024.</div>
-        `
+          <p>Medieval poetry spans centuries and languages.</p>
+          <ul>
+            <li>7th–9th c.: Monastic Latin & Old English verse in Northumbria.</li>
+            <li>10th–12th c.: Courtly French and Anglo-Norman tales spread chivalric ideals.</li>
+            <li>13th–15th c.: Middle English, Scots, and regional lyrics explode in popularity.</li>
+          </ul>
+          <p class="prompt">🌍 Imagine the British Isles buzzing with multilingual soundscapes.</p>
+        `,
+      },
+      {
+        title: "Why Poetry Mattered Then",
+        body: `
+          <p>Poetry was the go-to medium for memory, devotion, and entertainment.</p>
+          <ul>
+            <li>Stories travelled faster than manuscripts.</li>
+            <li>Rhythm helped people memorize history and scripture.</li>
+            <li>Performances bonded listeners in halls, churches, and village greens.</li>
+          </ul>
+          <p class="tip">Think of it as TikTok + podcasts + congregational singing rolled into one.</p>
+        `,
+      },
+      {
+        title: "Elegy & Heroic: Mood Check",
+        body: `
+          <p>Elegiac and heroic poems wrestle with loss, loyalty, and destiny.</p>
+          <ul>
+            <li><strong>Elegy:</strong> Reflective laments like <em>The Wanderer</em> and <em>The Seafarer</em>.</li>
+            <li><strong>Heroic:</strong> Celebrations of warriors and communal duty—think <em>Beowulf</em> energy.</li>
+            <li>Imagery: cold seas, mead halls, shining mail, fragile alliances.</li>
+          </ul>
+          <p class="prompt">❓Which emotion hits first for you—grief, pride, or both?</p>
+        `,
+      },
+      {
+        title: "Meet Bede: History as Storytime",
+        body: `
+          <p>Bede (c. 673–735) was a monk-historian who loved preserving poetry moments.</p>
+          <ul>
+            <li>His <em>Historia Ecclesiastica Gentis Anglorum</em> (Bede’s History) captures early English voices.</li>
+            <li>Describes how songs spread faith across Northumbria.</li>
+            <li>Makes history feel like a curated playlist of miracles and melodies.</li>
+          </ul>
+          <p class="tip">📜 Without Bede, we might never hear about Caedmon’s breakthrough.</p>
+        `,
+      },
+      {
+        title: "Caedmon’s Story: From Barn to Monastery",
+        body: `
+          <p>Caedmon is the shy herdsman who received a dream-call to sing in English.</p>
+          <ul>
+            <li>Bede says he left a feast to avoid singing, but woke with new lyrics.</li>
+            <li>Monks helped him polish verses about biblical history.</li>
+            <li>Shows poetry as a gift meant to be shared, not hidden.</li>
+          </ul>
+          <p class="prompt">🎤 Have you ever discovered a talent when someone encouraged you?</p>
+        `,
+      },
+      {
+        title: "Inside Caedmon’s Hymn",
+        body: `
+          <p>Old English praise poetry that merges heroic diction with Christian devotion.</p>
+          <div class="quote">
+            <p>“Nu scylun hergan hefaenricaes uard...”</p>
+          </div>
+          <ul>
+            <li>Alliteration keeps the lines musical for chanting.</li>
+            <li>Celebrates God as “guardian of heaven” and “shaper of earth.”</li>
+            <li>Sets the tone for vernacular worship across the islands.</li>
+          </ul>
+          <p class="prompt">🎶 If you remixed it today, what beat or instrument would you add?</p>
+        `,
+      },
+      {
+        title: "Heroic Energy IRL",
+        body: `
+          <p>Heroic poems doubled as leadership training.</p>
+          <ul>
+            <li>Warriors pledged loyalty to their lord; lords rewarded bravery.</li>
+            <li>Fate (wyrd) hangs over every battle, yet courage gives meaning.</li>
+            <li>Listeners learned how to hold communities together under pressure.</li>
+          </ul>
+          <p class="tip">Link it to today’s fandoms—heroes model ethics we still debate.</p>
+        `,
+      },
+      {
+        title: "Chivalric Poetry Arrives",
+        body: `
+          <p>By the 12th century, knights and courts reshape poetic storytelling.</p>
+          <ul>
+            <li>French romances bring Arthurian quests and coded love.</li>
+            <li>Poems become etiquette manuals for noble behavior.</li>
+            <li>Audiences crave tales balancing adventure with devotion.</li>
+          </ul>
+          <p class="tip">🏰 Drama, rituals, and romance—like a medieval binge series.</p>
+        `,
+      },
+      {
+        title: "Chivalric Values in Verse",
+        body: `
+          <p>What ideals keep surfacing?</p>
+          <ul>
+            <li>Bravery with humility before God.</li>
+            <li>Service to ladies, lords, and the poor.</li>
+            <li>Tests that refine both sword skills and moral compass.</li>
+          </ul>
+          <p class="prompt">🤔 Would you enjoy or resist living by these rules?</p>
+        `,
       },
       {
         title: "Lyric & Ballad Basics",
         body: `
-          <div class="split">
-            <div class="card">
-              <h3>Lyric Poetry</h3>
-              <p>Gives a single speaker’s feelings, set to music or recited with rhythm. Themes: love, devotion, daily life.</p>
-            </div>
-            <div class="card">
-              <h3>Ballad Form</h3>
-              <p>Tells stories with refrain and dialogue about love, crime, or mystery—perfect for dramatic cliffhangers.</p>
-            </div>
-          </div>
-          <div class="prompt">🎧📢 Pair up: Link a medieval lyric to a playlist track and perform a ballad stanza with pauses.</div>
-        `
-      },
-      {
-        title: "Embedded Verse: Caedmon’s Hymn",
-        body: `
-          <div class="card">
-            <p>“Nu sculon herigean heofonrices Weard…”</p>
-            <p class="citation">Old English praise of the Creator.</p>
-          </div>
-          <div class="reveal">
-            <button class="reveal-btn">🌟 <span>▼</span> Reveal meaning</button>
-            <p>Praises God as shaper of heaven and middle-earth, linking artistry to obedience.</p>
-          </div>
-        `
-      },
-      {
-        title: "Embedded Verse: I Have a Young Sister",
-        body: `
-          <div class="card">
-            <p>“I have a yong suster fer beyonden the see…”</p>
-            <p class="citation">Middle English lyric, playful and allegorical.</p>
-          </div>
-          <div class="reveal">
-            <button class="reveal-btn">🪄 <span>▼</span> Reveal meaning</button>
-            <p>Uses riddle form to express devotion to the Virgin Mary while sounding like romantic longing.</p>
-          </div>
-        `
-      },
-      {
-        title: "Embedded Verse: Lord Randall",
-        body: `
-          <div class="card">
-            <p>“O where ha you been, Lord Randall, my son?”</p>
-            <p class="citation">Scottish border ballad exposing betrayal with repeated questions.</p>
-          </div>
-          <div class="reveal">
-            <button class="reveal-btn">🕵️ <span>▼</span> Reveal meaning</button>
-            <p>Dialogue reveals poisoning through the mother’s persistent questioning and Randall’s fading responses.</p>
-          </div>
-        `
-      },
-      {
-        title: "Embedded Verse: The Three Ravens",
-        body: `
-          <div class="card">
-            <p>“There were three ravens sat on a tree…”</p>
-            <p class="citation">Ballad picturing loyalty even after death.</p>
-          </div>
-          <div class="reveal">
-            <button class="reveal-btn">🪶 <span>▼</span> Reveal meaning</button>
-            <p>Ravens debate feasting on a fallen knight, but loyal hounds and doe guard his body.</p>
-          </div>
-        `
-      },
-      {
-        title: "Lyric Techniques",
-        body: `
+          <p>Shift from courts to communities.</p>
           <ul>
-            <li>Refrain anchors mood.</li>
-            <li>Imagery invites sensory empathy.</li>
-            <li>Direct address simulates dialogue.</li>
+            <li><strong>Lyric:</strong> brief, personal, sometimes mystical reflections.</li>
+            <li><strong>Ballad:</strong> narrative dialogue with catchy refrains.</li>
+            <li>Both travel via memory—no printing press needed.</li>
           </ul>
-          <div class="prompt">🎤 Compose a two-line lyric using local imagery.</div>
-        `
+          <p class="tip">🎶 Think of them as community playlists you can hum anywhere.</p>
+        `,
       },
       {
-        title: "Ballad Techniques",
+        title: "Middle English Lyric: I Have a Young Sister",
         body: `
+          <p>This riddle-like lyric blends affection with spiritual longing.</p>
           <ul>
-            <li>Incremental repetition heightens suspense.</li>
-            <li>Question-answer format reveals secrets.</li>
-            <li>Simple rhyme aids memorization.</li>
+            <li>The “young sister” can be a beloved soul or the Church.</li>
+            <li>Nature imagery—gardens, songbirds—keeps it vivid.</li>
+            <li>Shows how everyday love and faith intertwine.</li>
           </ul>
-          <div class="prompt">📝 Upgrade: Rewrite a news headline as a ballad stanza.</div>
-        `
+          <p class="prompt">💡 What metaphors do you use for close friendships today?</p>
+        `,
       },
       {
-        title: "Lyric & Ballad Reflection",
+        title: "Ballad Storytelling Toolkit",
         body: `
-          <p>Both genres invite listeners to sing along emotionally, turning communal spaces into storytelling circles.</p>
-          <div class="prompt">🧠 What communal spaces (online/offline) echo this vibe today?</div>
-        `
+          <p>What makes ballads stick?</p>
+          <ul>
+            <li>Dialogue-heavy stanzas pull listeners in.</li>
+            <li>Repetition builds rhythm and suspense.</li>
+            <li>Surprising twists keep the crowd leaning forward.</li>
+          </ul>
+          <p class="prompt">🎯 Spot the hook line that everyone would chant together.</p>
+        `,
       },
       {
-        title: "Key Writers: Bede",
+        title: "Lord Randall: Poisoned Feasts",
         body: `
-          <p><strong>Bede’s History</strong> preserves narratives of faith and learning. His storytelling blends fact, miracle, and moral lesson.</p>
-          <div class="prompt">📚 Guiding Q: How does documenting history support spiritual goals?</div>
-        `
+          <p>Traditional ballad where a young hunter reveals he’s been poisoned.</p>
+          <ul>
+            <li>Call-and-response with his mother drives the drama.</li>
+            <li>Refrain “Make my bed soon” foreshadows tragedy.</li>
+            <li>Shows vulnerability beneath warrior bravado.</li>
+          </ul>
+          <p class="tip">😲 Imagine the gasp when the poison twist lands.</p>
+        `,
       },
       {
-        title: "Key Writers: Caedmon",
+        title: "The Three Ravens: Loyal Companions",
         body: `
-          <p><strong>Caedmon’s Hymn</strong> is the earliest recorded English Christian poem, inspired through a dream to sing divine creation.</p>
-          <div class="prompt">🌌 Reflect: Does creativity feel like calling or skill?</div>
-        `
+          <p>Three ravens debate feasting on a fallen knight—but loyalty wins.</p>
+          <ul>
+            <li>Animals reveal the knight’s faithful hounds and doe defending him.</li>
+            <li>The lady carries him to burial, turning sorrow into honor.</li>
+            <li>The ballad ponders who protects our memory after death.</li>
+          </ul>
+          <p class="prompt">🧐 Is the ending sad, comforting, or both for you?</p>
+        `,
       },
       {
-        title: "Key Writers: Wycliffe & Langland",
+        title: "Writer Spotlight: John Wycliffe",
         body: `
-          <div class="split">
-            <div class="card">
-              <h3>John Wycliffe</h3>
-              <p>Advocated scripture in the vernacular. Poetry around him highlights accessibility of faith.</p>
-              <p><em>Work:</em> <strong>I Have a Young Sister</strong> (Lollard circles loved allegory).</p>
-            </div>
-            <div class="card">
-              <h3>William Langland</h3>
-              <p><strong>Piers Plowman</strong> layers allegorical visions challenging corruption.</p>
-              <p><em>Related lyric:</em> moral dream-visions.</p>
-            </div>
-          </div>
-          <div class="prompt">🧩 What risks did vernacular writers take?</div>
-        `
+          <p>Wycliffe (d. 1384) championed scripture in English and inspired poetic outreach.</p>
+          <ul>
+            <li>Led Bible translation teams so laypeople could read sacred texts.</li>
+            <li>Lollard followers shared teachings through lyrics and sermons.</li>
+            <li>Empowered common believers to question unjust power.</li>
+          </ul>
+          <p class="tip">🗣️ Imagine the buzz when households first heard scripture in their own voice.</p>
+        `,
       },
       {
-        title: "Comparative Worldview: Values",
+        title: "Writer Spotlight: William Langland",
         body: `
-          <div class="side-by-side">
-            <div class="panel">
-              <h3>Medieval Europe</h3>
-              <ul>
-                <li>Honor tied to lineage and fealty.</li>
-                <li>Communal survival over individual desire.</li>
-              </ul>
-            </div>
-            <div class="panel">
-              <h3>Contemporary South Asian/Pakistani Students</h3>
-              <ul>
-                <li>Honor linked to family reputation and community service.</li>
-                <li>Balancing tradition with global aspirations.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="guiding-question">How do your family stories teach honor and duty?</div>
-        `
+          <p>Langland’s <em>Piers Plowman</em> uses dream visions to critique society.</p>
+          <ul>
+            <li>Mixes allegory with sharp observations about poverty and pride.</li>
+            <li>Centers a humble plowman searching for Truth.</li>
+            <li>Echoes Wycliffe’s call for reform while staying poetic.</li>
+          </ul>
+          <p class="prompt">🔍 Where do you see protest poetry today?</p>
+        `,
       },
       {
-        title: "Comparative Worldview: Faith & Community",
+        title: "Comparative Worldview: Section Intro",
         body: `
-          <div class="side-by-side">
-            <div class="panel">
-              <h3>Medieval Europe</h3>
-              <ul>
-                <li>Monastic centers guard literacy.</li>
-                <li>Pilgrimage as devotion and tourism.</li>
-              </ul>
-            </div>
-            <div class="panel">
-              <h3>Contemporary Students</h3>
-              <ul>
-                <li>Madrasa, school, and online spaces intersect.</li>
-                <li>Service projects blend faith and social impact.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="guiding-question">Where do you experience sacred community today?</div>
-        `
+          <p>Let’s respectfully compare medieval European contexts with contemporary South Asian/Pakistani student experiences.</p>
+          <p class="tip">🌐 Use these notes to spark dialogue, not stereotypes.</p>
+        `,
       },
       {
-        title: "Comparative Worldview: Gender & Power",
+        title: "Values",
         body: `
-          <div class="side-by-side">
-            <div class="panel">
-              <h3>Medieval Europe</h3>
-              <ul>
-                <li>Gender roles idealized through chivalric scripts.</li>
-                <li>Power anchored in nobility and church.</li>
-              </ul>
-            </div>
-            <div class="panel">
-              <h3>Contemporary Students</h3>
-              <ul>
-                <li>Debates on gender equity in classrooms, media, activism.</li>
-                <li>Power negotiated via democracy, networks, and voice.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="guiding-question">How can poetry critique power structures?</div>
-        `
+          <p><strong>Medieval Europe:</strong> Honor linked to lineage, martial service, and oath-keeping.</p>
+          <p><strong>Contemporary South Asian/Pakistani students:</strong> Honor tied to family reputation, academic success, and communal responsibility.</p>
+          <p class="prompt">🧭 Where do you feel the strongest expectations in your world?</p>
+        `,
       },
       {
-        title: "Comparative Reflection",
+        title: "Faith",
         body: `
-          <p>Despite distance, both contexts wrestle with faith, belonging, and responsibility. Stories shape norms and challenge them.</p>
-          <div class="prompt">🔄 Exit ticket: Share one medieval idea you would remix for your community.</div>
-        `
+          <p><strong>Medieval setting:</strong> Poetry often praises Christian mysteries, saints, and sacramental life.</p>
+          <p><strong>Modern South Asian/Pakistani context:</strong> Verse celebrates Islamic devotion, Sufi love poetry, and interfaith respect.</p>
+          <p class="tip">☪️✝️ Notice the shared desire to sing praise in familiar languages.</p>
+        `,
       },
       {
-        title: "Student Reflection Tracker",
+        title: "Community",
         body: `
-          <p>Log your learning moments:</p>
+          <p><strong>Medieval Europe:</strong> Mead-hall gatherings and fairs reinforce social bonds.</p>
+          <p><strong>South Asian/Pakistani students:</strong> Family mehfils, school events, and online spaces keep poetry social.</p>
+          <p class="prompt">👥 Who do you trust to tell your community’s story?</p>
+        `,
+      },
+      {
+        title: "Gender",
+        body: `
+          <p><strong>Medieval narratives:</strong> Idealize chaste ladies and valorous men, yet include women’s lyric voices.</p>
+          <p><strong>Contemporary students:</strong> Engage tradition while pushing for gender equity in classrooms and media.</p>
+          <p class="tip">⚖️ Listen for both continuity and change in expectations.</p>
+        `,
+      },
+      {
+        title: "Power",
+        body: `
+          <p><strong>Medieval scene:</strong> Church and nobility control literacy; poets rely on patrons.</p>
+          <p><strong>Today’s context:</strong> Access is wider, yet language, class, and digital divides still shape voices.</p>
+          <p class="prompt">📢 How does access to education influence whose stories get heard?</p>
+        `,
+      },
+      {
+        title: "Synthesize the Genres",
+        body: `
+          <p>Bring the forms into one mental map.</p>
+          <ul>
+            <li>Elegy keeps memory alive.</li>
+            <li>Heroic and chivalric verse train courage and compassion.</li>
+            <li>Lyric and ballad give everyday people a stage.</li>
+          </ul>
+          <p class="prompt">📝 Which form best matches the story you’d like to tell?</p>
+        `,
+      },
+      {
+        title: "Key Works Recap",
+        body: `
           <ol>
-            <li>Biggest surprise.</li>
-            <li>Quote to remember.</li>
-            <li>Action you’ll take or question to research.</li>
+            <li>Bede’s History preserves Caedmon’s Hymn.</li>
+            <li><em>I Have a Young Sister</em> shows Middle English lyric playfulness.</li>
+            <li><em>Lord Randall</em> and <em>The Three Ravens</em> carry ballad drama.</li>
+            <li>Langland and Wycliffe spark reformist conversations.</li>
           </ol>
-          <div class="prompt">📔 Keep a short note in your journal or class group.</div>
-        `
+          <p class="prompt">🔄 What connection between these works surprised you?</p>
+        `,
+      },
+      {
+        title: "Self-Check Moments",
+        body: `
+          <p>Try answering these quickly.</p>
+          <ul>
+            <li>How does Caedmon’s Hymn blend heroic style with devotion?</li>
+            <li>What social issues fire up Langland’s dream vision?</li>
+            <li>Why do ballads like <em>Lord Randall</em> rely on repetition?</li>
+          </ul>
+          <p class="tip">✅ Flag any sticky points for group review.</p>
+        `,
+      },
+      {
+        title: "Plan a Next Step",
+        body: `
+          <p>Pick an action to keep the learning going.</p>
+          <ol>
+            <li>Translate a stanza into your home language or dialect.</li>
+            <li>Draft a modern ballad about student life pressures.</li>
+            <li>Create a values comparison chart for class discussion.</li>
+          </ol>
+          <p class="prompt">🎯 Choose one now—future you will thank present you.</p>
+        `,
+      },
+      {
+        title: "Stay Curious",
+        body: `
+          <p>Keep listening for medieval echoes in contemporary music and poetry.</p>
+          <ul>
+            <li>Spot alliteration in your playlists.</li>
+            <li>Notice how communities use song to heal.</li>
+            <li>Share a favorite lyric in your study group chat.</li>
+          </ul>
+          <p class="tip">💬 Drop questions for our next session—we’ll dig in together.</p>
+        `,
       },
       {
         title: "Report Page: Citations & References",
         body: `
-          <p><strong>Examples referenced:</strong> Beowulf (anon.), The Wanderer (anon.), Deor (anon.), The Battle of Maldon (anon.), Caedmon’s Hymn (Bede, <em>Historia Ecclesiastica</em>), I Have a Young Sister (Middle English lyric), Lord Randall (traditional ballad), The Three Ravens (traditional ballad).</p>
-          <p><strong>Themes:</strong> Chivalric codes documented in romances like <em>Sir Gawain and the Green Knight</em>; lyric traditions summarized in medieval songbooks.</p>
+          <p><strong>In-text notes:</strong> Bede, <em>Historia Ecclesiastica Gentis Anglorum</em> (c. 731); Caedmon’s Hymn (recorded by Bede, bk. IV); Middle English lyric “I Have a Young Sister” (British Library MS Sloane 2593); Ballad “Lord Randall” (Child Ballad 12); Ballad “The Three Ravens” (Child Ballad 26); William Langland, <em>Piers Plowman</em> (c. 1370s); John Wycliffe and the late-14th-century English Bible movement.</p>
           <h3>References</h3>
           <ul>
-            <li>Bede. <em>Ecclesiastical History of the English People</em>.</li>
-            <li>Fulk, R. D., and Christopher M. Cain. <em>Contexts of Old English Literature</em>.</li>
-            <li>Greenblatt, Stephen, ed. <em>Norton Anthology of English Literature</em>, Vol. A.</li>
-            <li>Hanna, Ralph. <em>Piers Plowman</em>.</li>
-            <li>Johnston, David, ed. <em>Medieval Lyric: A Critical Anthology</em>.</li>
+            <li>Bede. <em>Historia Ecclesiastica Gentis Anglorum</em>.</li>
+            <li>Caedmon. “Hymn.” In Bede’s <em>Historia Ecclesiastica</em>.</li>
+            <li><em>I Have a Young Sister</em>. Middle English lyric, British Library MS Sloane 2593.</li>
+            <li><em>Lord Randall</em>. In Francis James Child, <em>English and Scottish Popular Ballads</em>.</li>
+            <li><em>The Three Ravens</em>. In Francis James Child, <em>English and Scottish Popular Ballads</em>.</li>
+            <li>Langland, William. <em>Piers Plowman</em>.</li>
+            <li>Wycliffe Bible manuscripts (late 14th century).</li>
           </ul>
-          <div class="prompt">📚 Cite any new sources you bring into class discussion.</div>
-        `
-      }
+          <p class="prompt">📚 Add any new sources you consult in assignments.</p>
+        `,
+      },
     ];
 
     const deck = document.getElementById('deck');
